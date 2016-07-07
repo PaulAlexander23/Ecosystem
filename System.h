@@ -14,6 +14,7 @@ public:
 	~System();
 
 	double f(double t, double x[nS], int id);
+	int euler(double t, double h);
 	int rk4(double t, double h);
 	int timestep(double t, double h);
 

@@ -8,7 +8,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	System system;
 
-	double dt = 0.02;
+	double dt = 1;
 	double t = 0;
 	int n = 0;
 
@@ -20,17 +20,16 @@ int _tmain(int argc, _TCHAR* argv[])
 
 
 
-	while (t <= 10)
+	while (t <= 1)
 	{
-		if (n % 10 == 0){
+		//if (n % 1 == 0){
 			std::cout << "\nTime: " << t << "\n";
 			for (int i = 0; i < nS; i++)
 			{
 				std::cout << "Species No:" << i << ", Population:" << *system.x[i] << "\n";
 			}
 			std::cout << "Score:" << score << std::endl;
-			_sleep(400);
-		}
+		//}
 
 
 

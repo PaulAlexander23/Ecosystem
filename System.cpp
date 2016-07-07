@@ -7,19 +7,28 @@ System::System()
 	double tmp[nS];
 
 
+	//tmp[0] = 0;
+	//tmp[1] = 0;
+	//tmp[2] = -0.1;
+
+
+	//species[0] = new Species(0, 5.0f, 0.0f, tmp, 0.05f, true, 0.0f);
+	//species[1] = new Species(1, 5.0f, 0.0f, tmp, 0.05f, true, 0.0f);
+
+	//tmp[0] = 0.1;
+	//tmp[1] = 0.1;
+	//tmp[2] = 0;
+
+	//species[2] = new Species(2, 1.0f, -5.0f, tmp, false, 0.0f, 0.0f);
+
 	tmp[0] = 0;
 	tmp[1] = 0;
-	tmp[2] = -0.1;
-
-
-	species[0] = new Species(0, 5.0f, 0.0f, tmp, 0.05f, true, 0.0f);
-	species[1] = new Species(1, 5.0f, 0.0f, tmp, 0.05f, true, 0.0f);
-
-	tmp[0] = 0.1;
-	tmp[1] = 0.1;
 	tmp[2] = 0;
 
-	species[2] = new Species(2, 1.0f, -5.0f, tmp, false, 0.0f, 0.0f);
+
+	species[0] = new Species(0, 5.0, -0.001, tmp, 0.00, true, 0.0);
+	species[1] = new Species(1, 5.0, -0.1, tmp, 0.00, true, 0.0);
+	species[2] = new Species(2, 1.0, 0.0, tmp, 0.00,false, 0.0);
 
 
 	for (int i = 0; i < nS; i++)
@@ -46,6 +55,7 @@ System::~System()
 	double temp2 = 0;
 
 	temp = species[id]->indpgrowth*x[id];
+
 	for (int i = 0; i < nS; i++)
 	{
 		temp += species[id]->dpgrowth[i] * x[id] * x[i];
@@ -68,13 +78,25 @@ System::~System()
 	return temp;
 }
 
+int System::euler(double t, double h)
+{
+
+	for (int i = 0; i < nS; i++)
+	{
+		dx[i] = h*f(t, *x, i);
+		std::cout << dx[i] << "\n";
+	}
+
+	return 0;
+}
+
+
 int System::rk4(double t, double h)
 {
 	double k[4][nS];
 	double x1[nS];
 	double x2[nS];
 	double x3[nS];
-	
 
 	for (int i = 0; i < nS; i++)
 	{
@@ -97,20 +119,24 @@ int System::rk4(double t, double h)
 	for (int i = 0; i < nS; i++)
 	{
 		k[3][i] = f(t + h, x3, i);
-		dx[i] = h*(k[0][i] + k[1][i]*2 + k[2][i]*2 + k[3][i])/6;
+		dx[i] = h*(k[0][i] + k[1][i] * 2 + k[2][i] * 2 + k[3][i]) / 6;
 	}
 
 	return 0;
 }
 
-
 int System::timestep(double t, double h)
 {
-	rk4(t, h);
+	euler(t, h);
 
 	for (int i = 0; i < nS; i++)
 	{
 		*x[i] += dx[i];
+		if (*x[i] < 0)
+		{
+			*x[i] = 0;
+		}
+
 	}
 
 
